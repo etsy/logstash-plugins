@@ -3,33 +3,9 @@ require "logstash/filters/base"
 require "logstash/namespace"
 require "cgi"
 
-# This filter helps automatically parse messages (or specific event fields)
-# which are of the 'foo=bar' variety.
-#
-# For example, if you have a log message which contains 'ip=1.2.3.4
-# error=REFUSED', you can parse those automatically by configuring:
-#
-#     filter {
-#       kv { }
-#     }
-#
-# The above will result in a message of "ip=1.2.3.4 error=REFUSED" having
-# the fields:
-#
-# * ip: 1.2.3.4
-# * error: REFUSED
-#
-# This is great for postfix, iptables, and other types of logs that
-# tend towards 'key=value' syntax.
-#
-# You can configure any arbitrary strings to split your data on,
-# in case your data is not structured using '=' signs and whitespace.
-# For example, this filter can also be used to parse query parameters like
-# 'foo=bar&baz=fizz' by setting the `field_split` parameter to "&".
 class LogStash::Filters::Splitkv < LogStash::Filters::Base
   config_name "splitkv"
 
-  # A string of characters to trim from the value. This is useful if your
   # values are wrapped in brackets or are terminated with commas (like postfix
   # logs).
   #
@@ -39,7 +15,7 @@ class LogStash::Filters::Splitkv < LogStash::Filters::Base
   # For example, to strip '<', '>', '[', ']' and ',' characters from values:
   #
   #     filter {
-  #       kv {
+  #       splitkv {
   #         trimval => "<>\[\],"
   #       }
   #     }
@@ -54,7 +30,7 @@ class LogStash::Filters::Splitkv < LogStash::Filters::Base
   # For example, to strip '<' '>' '[' ']' and ',' characters from keys:
   #
   #     filter {
-  #       kv {
+  #       splitkv {
   #         trimkey => "<>\[\],"
   #       }
   #     }
